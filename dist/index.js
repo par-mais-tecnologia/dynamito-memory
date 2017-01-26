@@ -1,40 +1,58 @@
-import winston from 'winston';
+'use strict';
 
-import Document from './document';
-import Database from './db';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = DynamitoMemory;
 
-import process from 'process';
+var _winston = require('winston');
 
-export default function DynamitoMemory() {
+var _winston2 = _interopRequireDefault(_winston);
+
+var _document = require('./document');
+
+var _document2 = _interopRequireDefault(_document);
+
+var _db = require('./db');
+
+var _db2 = _interopRequireDefault(_db);
+
+var _process = require('process');
+
+var _process2 = _interopRequireDefault(_process);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function DynamitoMemory() {
   DynamitoMemory.DocumentClient.Parent = this;
 
-  this._db = new Database();
+  this._db = new _db2.default();
 }
 
-DynamitoMemory.DocumentClient = Document;
+DynamitoMemory.DocumentClient = _document2.default;
 
 DynamitoMemory.prototype.db = function () {
   return this._db;
 };
 
 DynamitoMemory.prototype.listTables = function (data, callback) {
-  winston.silly('Listing tables: ');
-  winston.silly(data);
-  process.nextTick(callback, null, {
+  _winston2.default.silly('Listing tables: ');
+  _winston2.default.silly(data);
+  _process2.default.nextTick(callback, null, {
     TableNames: this._db.getTablesNames()
   });
 };
 
 DynamitoMemory.prototype.createTable = function (tableData, callback) {
-  winston.silly('Creating tables: ');
-  winston.silly(tableData);
+  _winston2.default.silly('Creating tables: ');
+  _winston2.default.silly(tableData);
   this._db.createTable(tableData.TableName, tableData);
-  process.nextTick(callback, null, tableData);
+  _process2.default.nextTick(callback, null, tableData);
 };
 
 DynamitoMemory.prototype.deleteTable = function (tableData, callback) {
-  winston.silly('Deleting tables: ');
-  winston.silly(tableData);
+  _winston2.default.silly('Deleting tables: ');
+  _winston2.default.silly(tableData);
   this._db.deleteTable(tableData.TableName);
-  process.nextTick(callback, null, tableData.TableName);
+  _process2.default.nextTick(callback, null, tableData.TableName);
 };

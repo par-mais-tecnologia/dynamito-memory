@@ -1,3 +1,9 @@
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = Database;
 /**
  * Match a finder to an item.
  *
@@ -26,13 +32,13 @@ function match(item, finder) {
 
 function toFinder(tableDef, value) {
   var keyObj = {};
-  tableDef.forEach(it => {
+  tableDef.forEach(function (it) {
     keyObj[it.AttributeName] = value[it.AttributeName];
   });
   return keyObj;
 }
 
-export default function Database() {
+function Database() {
   this.db = {};
 }
 
@@ -89,9 +95,9 @@ Database.prototype.query = function (table, searchObject) {
   var dataSet = this.db[table].data;
   var result = [];
 
-  dataSet.forEach(it => {
+  dataSet.forEach(function (it) {
     var matches = 0;
-    searchObject.forEach(filter => {
+    searchObject.forEach(function (filter) {
       if (filter.opr(it[filter.name])) {
         matches++;
       }

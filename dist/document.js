@@ -1,8 +1,21 @@
-import winston from 'winston';
+'use strict';
 
-import process from 'process';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = Document;
 
-export default function Document() {
+var _winston = require('winston');
+
+var _winston2 = _interopRequireDefault(_winston);
+
+var _process = require('process');
+
+var _process2 = _interopRequireDefault(_process);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function Document() {
   if (Document.Parent === undefined || Document.Parent === null) {
     throw new Error('Document cannot be created without a DynamitoMemory object.');
   }
@@ -12,7 +25,7 @@ export default function Document() {
 Document.prototype._filterField = function (item, fieldsToKeep) {
   var result = {};
   var keys = Object.keys(item);
-  keys.forEach(k => {
+  keys.forEach(function (k) {
     if (fieldsToKeep.indexOf(k) !== -1) {
       result[k] = item[k];
     }
@@ -21,15 +34,17 @@ Document.prototype._filterField = function (item, fieldsToKeep) {
 };
 
 Document.prototype._filterFields = function (items, fieldsToKeep) {
-  return items.map(it => {
-    return this._filterField(it, fieldsToKeep);
+  var _this = this;
+
+  return items.map(function (it) {
+    return _this._filterField(it, fieldsToKeep);
   });
 };
 
 Document.prototype._projectedFields = function (projected, expressionAttributes) {
   if (projected !== undefined && projected !== '') {
     var fieldsToKeep = projected.split(',');
-    return fieldsToKeep.map(it => {
+    return fieldsToKeep.map(function (it) {
       return expressionAttributes[it.trim()];
     });
   }
@@ -62,8 +77,8 @@ Document.prototype._extractFragment = function (text) {
   if (text.indexOf('>=') !== -1) {
     // GTEqual
     var gteq = this._extractParams(text.split('>='));
-    gteq.opr = a => {
-      return b => {
+    gteq.opr = function (a) {
+      return function (b) {
         return b >= a;
       };
     };
@@ -71,8 +86,8 @@ Document.prototype._extractFragment = function (text) {
   } else if (text.indexOf('<=') !== -1) {
     // LTEqual
     var lteq = this._extractParams(text.split('<='));
-    lteq.opr = a => {
-      return b => {
+    lteq.opr = function (a) {
+      return function (b) {
         return b <= a;
       };
     };
@@ -80,8 +95,8 @@ Document.prototype._extractFragment = function (text) {
   } else if (text.indexOf('<') !== -1) {
     // LT
     var lt = this._extractParams(text.split('<'));
-    lt.opr = a => {
-      return b => {
+    lt.opr = function (a) {
+      return function (b) {
         return b < a;
       };
     };
@@ -89,8 +104,8 @@ Document.prototype._extractFragment = function (text) {
   } else if (text.indexOf('>') !== -1) {
     // GT
     var gt = this._extractParams(text.split('>'));
-    gt.opr = a => {
-      return b => {
+    gt.opr = function (a) {
+      return function (b) {
         return b > a;
       };
     };
@@ -98,8 +113,8 @@ Document.prototype._extractFragment = function (text) {
   } else if (text.indexOf('=') !== -1) {
     // Equality
     var eq = this._extractParams(text.split('='));
-    eq.opr = a => {
-      return b => {
+    eq.opr = function (a) {
+      return function (b) {
         return a === b;
       };
     };
@@ -138,8 +153,8 @@ Document.prototype._projectedExpression = function (expression, names, values) {
 };
 
 Document.prototype.scan = function (params, callback) {
-  winston.silly('SCAN\'ing: ' + params.TableName);
-  winston.silly(params);
+  _winston2.default.silly('SCAN\'ing: ' + params.TableName);
+  _winston2.default.silly(params);
 
   var searchObject = this._projectedExpression(params.FilterExpression, params.ExpressionAttributeNames, params.ExpressionAttributeValues);
 
@@ -161,7 +176,7 @@ Document.prototype.scan = function (params, callback) {
     items = this._filterFields(items, fieldsToKeep);
   }
 
-  process.nextTick(callback, null, {
+  _process2.default.nextTick(callback, null, {
     Items: items
   });
 };
@@ -172,31 +187,31 @@ Document.prototype.scan = function (params, callback) {
  * @param callback
  */
 Document.prototype.put = function (params, callback) {
-  winston.silly('PUT\'ing: ' + params.TableName);
-  winston.silly(params);
+  _winston2.default.silly('PUT\'ing: ' + params.TableName);
+  _winston2.default.silly(params);
   this._parent.db().put(params.TableName, params.Item);
-  process.nextTick(callback, null);
+  _process2.default.nextTick(callback, null);
 };
 
 Document.prototype.batchWrite = function (params, callback) {
   var self = this;
 
-  winston.silly('BATCH WRITE\'ing: ');
-  winston.silly(params);
+  _winston2.default.silly('BATCH WRITE\'ing: ');
+  _winston2.default.silly(params);
   var dataArray = Object.keys(params.RequestItems);
-  dataArray.forEach(tab => {
-    params.RequestItems[tab].forEach(item => {
+  dataArray.forEach(function (tab) {
+    params.RequestItems[tab].forEach(function (item) {
       self._parent.db().put(tab, item.PutRequest.Item);
     });
   });
-  process.nextTick(callback, null, {
+  _process2.default.nextTick(callback, null, {
     UnprocessedItems: {}
   });
 };
 
 Document.prototype.get = function (params, callback) {
-  winston.silly('GET\'ing: ' + params.TableName);
-  winston.silly(params);
+  _winston2.default.silly('GET\'ing: ' + params.TableName);
+  _winston2.default.silly(params);
 
   var item = this._parent.db().get(params.TableName, params.Key);
 
@@ -206,14 +221,14 @@ Document.prototype.get = function (params, callback) {
     item = this._filterField(item, fieldsToKeep);
   }
 
-  process.nextTick(callback, null, {
+  _process2.default.nextTick(callback, null, {
     Item: item
   });
 };
 
 Document.prototype.query = function (params, callback) {
-  winston.silly('DELETE\'ing: ' + params.TableName);
-  winston.silly(params);
+  _winston2.default.silly('DELETE\'ing: ' + params.TableName);
+  _winston2.default.silly(params);
 
   var searchObject = this._projectedExpression(params.KeyConditionExpression, params.ExpressionAttributeNames, params.ExpressionAttributeValues);
 
@@ -225,14 +240,14 @@ Document.prototype.query = function (params, callback) {
     items = this._filterFields(items, fieldsToKeep);
   }
 
-  process.nextTick(callback, null, {
+  _process2.default.nextTick(callback, null, {
     Items: items
   });
 };
 
 Document.prototype.delete = function (params, callback) {
-  winston.silly('DELETE\'ing: ' + params.TableName);
-  winston.silly(params);
+  _winston2.default.silly('DELETE\'ing: ' + params.TableName);
+  _winston2.default.silly(params);
   this._parent.db().delete(params.TableName, params.Key);
-  process.nextTick(callback, null);
+  _process2.default.nextTick(callback, null);
 };
