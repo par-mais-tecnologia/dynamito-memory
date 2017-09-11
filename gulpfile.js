@@ -14,21 +14,18 @@ var babel = require('gulp-babel');
 // when they're loaded
 require('babel-core/register');
 
-gulp.task('static', function () {
-  return gulp.src('**/*.js')
+gulp.task('static', () =>
+  gulp.src([
+    'lib/**/*.js',
+    '!test/**/*.js',
+  ])
     .pipe(excludeGitignore())
-    .pipe(eslint({
-      globals: {
-        expect: true,
-        sinon: true
-      }
-    }))
+    .pipe(eslint())
     .pipe(eslint.format())
-    .pipe(eslint.failAfterError());
-});
+    .pipe(eslint.failAfterError()));
 
 gulp.task('nsp', function (cb) {
-  nsp({package: path.resolve('package.json')}, cb);
+  nsp({ package: path.resolve('package.json') }, cb);
 });
 
 gulp.task('pre-test', function () {
@@ -61,6 +58,7 @@ gulp.task('test', ['pre-test'], function (cb) {
     .pipe(istanbul.writeReports())
     .on('end', function () {
       cb(mochaErr);
+      process.exit();
     });
 });
 

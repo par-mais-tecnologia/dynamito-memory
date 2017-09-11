@@ -1,0 +1,10 @@
+{
+  "globals": {
+    "expect": true,
+    "sinon": true
+  },
+  "parser": "babel-eslint",
+  "rules": {
+    "eol-last": 2
+  }
+}

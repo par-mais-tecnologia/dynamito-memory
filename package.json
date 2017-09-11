@@ -22,8 +22,11 @@
   "homepage": "https://github.com/par-mais-tecnologia/dynamito-memory.git#README",
   "devDependencies": {
     "babel-core": "^6.9.1",
-    "babel-eslint": "^6.0.4",
+    "babel-eslint": "^7.1.1",
+    "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-preset-es2015": "^6.9.0",
+    "babel-preset-es2017": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
     "babel-register": "^6.6.5",
     "chai": "^3.2.0",
     "chai-as-promised": "^6.0.0",
