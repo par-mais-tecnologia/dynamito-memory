@@ -1,6 +1,6 @@
 {
   "name": "dynamito-memory",
-  "version": "0.0.2",
+  "version": "0.0.0",
   "description": "Library to simulate DynamoDb in memory. Useful to develop using Dynamo.",
   "main": "dist/index.js",
   "directories": {
@@ -12,14 +12,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@bitbucket.org/parmaistecnologia/dynamito-memory.git"
+    "url": "git+ssh://git@github.com:par-mais-tecnologia/dynamito-memory.git"
   },
   "author": "Diego Laucsen",
   "files": [
     "dist"
   ],
   "license": "ISC",
-  "homepage": "https://bitbucket.org/parmaistecnologia/dynamito-memory#readme",
+  "homepage": "https://github.com/par-mais-tecnologia/dynamito-memory.git#README",
   "devDependencies": {
     "babel-core": "^6.9.1",
     "babel-eslint": "^6.0.4",
